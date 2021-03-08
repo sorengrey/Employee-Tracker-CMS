@@ -16,7 +16,7 @@ const connection = mysql.createConnection({
     // password
     password: 'toby0000',
 
-    // Change this database name!
+    // Change this database name when you get your db ready!
     database: 'greatBay_DB',
 });
 
