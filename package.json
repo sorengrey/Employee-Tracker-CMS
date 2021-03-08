@@ -1,0 +1,28 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "A database management application that keeps track of employee departments and roles.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sorengrey/Employee-Tracker-CMS.git"
+  },
+  "keywords": [
+    "cms",
+    "database",
+    "management",
+    "employees"
+  ],
+  "author": "Heather Smith - halexsmith86@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sorengrey/Employee-Tracker-CMS/issues"
+  },
+  "homepage": "https://github.com/sorengrey/Employee-Tracker-CMS#readme",
+  "dependencies": {
+    "inquirer": "^8.0.0"
+  }
+}
