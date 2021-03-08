@@ -16,26 +16,48 @@ const connection = mysql.createConnection({
     // password
     password: 'toby0000',
 
-    // Change this database name when you get your db ready!
-    database: 'greatBay_DB',
+    // database
+    database: 'employeetracker',
 });
 
-// inquirer prompts main menu
+// starts the inquirer prompts
 const start = () => {
     inquirer
         .prompt({
             name: 'which',
             type: 'list',
-            message: 'Welcome! Would you like to add a [DEPARTMENT], a [ROLE], or an [EMPLOYEE]?',
-            choices: ['DEPARTMENT', 'ROLE', 'EMPLOYEE', 'EXIT'],
+            message: 'Welcome! What would you like to do?',
+            choices: ['Add departments, roles, or employees', 'View departments, roles, or employees', 'Update employee roles', 'EXIT'],
         })
         .then((response) => {
-            // based on their answer, either call the bid or the post functions
-            if (response.which === 'DEPARTMENT') {
+            if (response.which === 'Add departments, roles, or employees') {
+                addMenu();
+            } else if (response.which === 'View departments, roles, or employees') {
+                viewMenu();
+            } else if (response.which === 'Update employee roles') {
+                updateEmp();
+            }
+            else {
+                connection.end();
+            }
+        });
+};
+
+// inquirer prompts - main menu for adding new entries
+const addMenu= () => {
+    inquirer
+        .prompt({
+            name: 'which',
+            type: 'list',
+            message: 'Welcome! Would you like to add a [department], a [role], or an [employee]?',
+            choices: ['department', 'role', 'employee', 'EXIT'],
+        })
+        .then((response) => {
+            if (response.which === 'department') {
                 addDept();
-            } else if (response.which === 'ROLE') {
+            } else if (response.which === 'role') {
                 addRole();
-            } else if (response.which === 'EMPLOYEE') {
+            } else if (response.which === 'employee') {
                 addEmp();
             }
             else {
@@ -120,3 +142,10 @@ const addEmp = () => {
             // input needs to be added to the db
         });
 }
+
+// connects to the mysql server and sql database
+connection.connect((err) => {
+  if (err) throw err;
+  // runs the start function after the connection is made to prompt the user
+  start();
+});
