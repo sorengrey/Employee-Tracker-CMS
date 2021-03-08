@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/sorengrey/Employee-Tracker-CMS#readme",
   "dependencies": {
-    "inquirer": "^8.0.0"
+    "inquirer": "^8.0.0",
+    "mysql": "^2.18.1"
   }
 }
