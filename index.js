@@ -1,7 +1,16 @@
+// TO DO
+// write the viewing menu function/prompts
+// write the updating function/prompts
+
 // dependencies
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
+
+// imported functions
+const adding = require('./Assets/js/addingprompts.js');
+const viewing = require('./Assets/js/viewingprompts.js');
+const updating = require('./Assets/js/updatingprompts.js');
 
 // connecting the database
 const connection = mysql.createConnection({
@@ -27,14 +36,14 @@ const start = () => {
             name: 'which',
             type: 'list',
             message: 'Welcome! What would you like to do?',
-            choices: ['Add departments, roles, or employees', 'View departments, roles, or employees', 'Update employee roles', 'EXIT'],
+            choices: ['[Add] departments, roles, or employees', '[View] departments, roles, or employees', '[Update] employee roles', 'EXIT'],
         })
         .then((response) => {
-            if (response.which === 'Add departments, roles, or employees') {
+            if (response.choices === '[Add] departments, roles, or employees') {
                 addMenu();
-            } else if (response.which === 'View departments, roles, or employees') {
+            } else if (response.choices === '[View] departments, roles, or employees'){
                 viewMenu();
-            } else if (response.which === 'Update employee roles') {
+            } else if (response.choices === '[Update] employee roles'){
                 updateEmp();
             }
             else {
@@ -42,106 +51,6 @@ const start = () => {
             }
         });
 };
-
-// inquirer prompts - main menu for adding new entries
-const addMenu= () => {
-    inquirer
-        .prompt({
-            name: 'which',
-            type: 'list',
-            message: 'Welcome! Would you like to add a [department], a [role], or an [employee]?',
-            choices: ['department', 'role', 'employee', 'EXIT'],
-        })
-        .then((response) => {
-            if (response.which === 'department') {
-                addDept();
-            } else if (response.which === 'role') {
-                addRole();
-            } else if (response.which === 'employee') {
-                addEmp();
-            }
-            else {
-                connection.end();
-            }
-        });
-};
-
-// prompts for adding a department
-const addDept = () => {
-    inquirer
-        .prompt({
-            name: 'deptid',
-            type: 'input',
-            message: 'What is the department\'s ID number?',
-        },
-        {
-            name: 'deptname',
-            type: 'input',
-            message: 'What is the department\'s name?',
-        }
-        )
-        .then((response) => {
-            // input needs to be added to the db
-        });
-};
-
-// prompts for adding a role
-const addRole = () => {
-    inquirer
-        .prompt({
-            name: 'roleid',
-            type: 'input',
-            message: 'What is the role\'s ID number?',
-        },
-        {
-            name: 'rolename',
-            type: 'input',
-            message: 'What is the role\'s name?',
-        },
-        {
-            name: 'rolesal',
-            type: 'input',
-            message: 'What is the role\'s yearly salary?',
-        },
-        {   name: 'roledept',
-            type: 'input',
-            message: 'What is the department of the role\'s ID number?',
-    })
-        .then((response) => {
-            // input needs to be added to the db
-        });
-}
-
-// prompts for adding an employee
-const addEmp = () => {
-    inquirer
-        .prompt({
-            name: 'empid',
-            type: 'input',
-            message: 'What is the employee\'s ID number?',
-        },
-        {
-            name: 'firstname',
-            type: 'input',
-            message: 'What is the employee\'s first name?',
-        },
-        {
-            name: 'lastname',
-            type: 'input',
-            message: 'What is the employee\'s last name?',
-        },
-        {   name: 'erid',
-            type: 'input',
-            message: 'What is the department of the employee\'s ID number?',
-        },
-        {
-            name: 'manaid',
-            type: 'input',
-            message: 'What is the employee\'s manager\'s ID number?',
-        }).then((response) => {
-            // input needs to be added to the db
-        });
-}
 
 // connects to the mysql server and sql database
 connection.connect((err) => {
