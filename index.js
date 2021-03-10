@@ -1,6 +1,7 @@
 // TO DO
 // write the viewing menu function/prompts
 // write the updating function/prompts
+// get the db connected properly
 
 // dependencies
 const mysql = require('mysql');
@@ -8,9 +9,9 @@ const inquirer = require('inquirer');
 const cTable = require('console.table');
 
 // imported functions
-const adding = require('./Assets/js/addingprompts.js');
-const viewing = require('./Assets/js/viewingprompts.js');
-const updating = require('./Assets/js/updatingprompts.js');
+ const adding = require('./Assets/js/addingprompts.js');
+// const viewing = require('./Assets/js/viewingprompts.js');
+// const updating = require('./Assets/js/updateprompts.js');
 
 // connecting the database
 const connection = mysql.createConnection({
@@ -29,32 +30,47 @@ const connection = mysql.createConnection({
     database: 'employeetracker',
 });
 
+// selects all the info in the database and displays it in the console
+function selectAll () {
+    connection.query("SELECT * FROM employeetracker", (err, data) => {
+    if (err) throw err;
+    console.log(data)
+    })
+  }
+
 // starts the inquirer prompts
-const start = () => {
-    inquirer
-        .prompt({
-            name: 'which',
-            type: 'list',
-            message: 'Welcome! What would you like to do?',
-            choices: ['[Add] departments, roles, or employees', '[View] departments, roles, or employees', '[Update] employee roles', 'EXIT'],
-        })
-        .then((response) => {
-            if (response.choices === '[Add] departments, roles, or employees') {
+function start() {
+    console.log('in start')
+    inquirer.prompt([{
+        type: 'list',
+        message: 'Welcome! Please select from the following options:',
+        name: 'start',
+        choices: ['Add departments, roles, or employees', 'View departments, roles, or employees', 'Update employee roles', 'EXIT']
+    }]).then(response => {
+        console.log('inside response')
+            if (response.start === 'Add departments, roles, or employees'){
                 addMenu();
-            } else if (response.choices === '[View] departments, roles, or employees'){
+            } else if (response.start === 'View departments, roles, or employees'){
                 viewMenu();
-            } else if (response.choices === '[Update] employee roles'){
+            } else if (response.start === 'Update employee roles'){
                 updateEmp();
             }
             else {
+                console.log('Test')
                 connection.end();
             }
-        });
-};
+    })
+}
+
+const doDatabaseThings = () => {
+     selectAll();
+     start();
+}
 
 // connects to the mysql server and sql database
 connection.connect((err) => {
-  if (err) throw err;
-  // runs the start function after the connection is made to prompt the user
-  start();
+  if (err) throw err
+  else console.log('Running!')
 });
+
+// doDatabaseThings();

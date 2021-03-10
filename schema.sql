@@ -7,7 +7,6 @@ USE employeetracker;
 CREATE TABLE department (
   id INT NOT NULL,
   name VARCHAR(30), -- to hold department name
-  role VARCHAR(30),
   PRIMARY KEY (id)
 );
 
@@ -27,3 +26,8 @@ CREATE TABLE employee (
   manager_id INT, -- to hold reference to another employee that manages the employee being Created. This field may be null if the employee has no manager
   PRIMARY KEY (id)
   );
+  
+--   INSERT INTO department (id, name)
+--   VALUES (324, 'Accounting');
+--   
+--   SELECT * FROM department;
