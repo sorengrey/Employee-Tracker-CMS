@@ -1,4 +1,9 @@
 // TO DO
+// write view functions that console log tables
+// write update functions for employee table
+// make a pretty banner
+// record video of it working
+// write the README
 
 // dependencies
 const mysql = require('mysql');
@@ -76,7 +81,6 @@ function addDept() {
   });
 };
 
-
 // prompts for adding a role
 function addRole() {
   return inquirer
@@ -111,10 +115,8 @@ function addRole() {
         console.log("New role added!");
         start();
    });    
- });
-          
+ });    
 }
-
 
 // prompts for adding an employee
 function addEmp(){
@@ -155,14 +157,28 @@ function addEmp(){
         console.log("New employee added!");
         start();
         });    
-    });
-    
+    });  
 }
-
 
 // menu prompts for viewing depts, roles, and employees
 const viewMenu = () => {
-
+    return inquirer
+    .prompt({
+        name: 'whichview',
+        type: 'list',
+        message: 'What would you like to view?',
+        choices: ['departments', 'roles', 'employees'],
+    }).then(response => {
+        if(response.whichview === 'departments'){
+            viewDept();
+        }
+        else if(response.whichview === 'roles'){
+            viewRoles();
+        }
+        else if(response.whichview === 'employees'){
+            viewEmployees();
+        }
+    })
 }
 
 // prompts to update an employee
@@ -174,9 +190,14 @@ const updateEmp = () => {
           message: 'What is the employee\'s id number?',
         },
         {
-          name: 'newname',
+          name: 'newfirst',
           type: 'confirm',
-          message: 'Has the employee\'s name changed?',
+          message: 'Has the employee\'s first name changed?',
+        },
+        {
+            name: 'newlast',
+            type: 'confirm',
+            message: 'Has the employee\'s last name changed?',
         },
         {
           name: 'newrole',
@@ -189,18 +210,24 @@ const updateEmp = () => {
           message: 'Has the employee\'s manager changed?',
         }])
         .then((response => {
-            let newDept;
-            // input needs to be added to the db
+            if(response.newfirst = true){
+                newFirst();
+            } else if (response.newlast = true){
+                newLast();
+            } else if (response.newmgr = true){
+                changeMgr();
+            } else if (response.newrole = true){
+                changeRole();
+            } else connection.end;
+            // connection.query("UPDATE employee, SET name = 'response.newname' ")
+            
         }));
   };
 
-// function to add a new role
-function addNewRole(){
-}
-
-// function to add a new employee
-function addNewEmployee(){
-}
+  function newFirst();
+  function newLast();
+  function changeMgr();
+  function changeRole();
 
 function init() {
  // selectAll();
