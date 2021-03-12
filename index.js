@@ -1,7 +1,4 @@
 // TO DO
-// write the viewing menu function/prompts
-// write the updating function/prompts
-// figure out how to put queries in js functions
 
 // dependencies
 const mysql = require('mysql');
@@ -9,7 +6,7 @@ const inquirer = require('inquirer');
 const cTable = require('console.table');
 
 // import connection
-connect = require('./Assets/connection.js');
+const connection = require('./Assets/connection.js');
 
 // starts the main menu prompts
 function start() {
@@ -26,7 +23,7 @@ function start() {
           viewMenu();
       } else if (response.options === 'Update employee roles') {
           updateEmp();
-      } else { console.log('Test');
+      } else { connection.end();
       }
   });
 };
@@ -66,11 +63,19 @@ function addDept() {
           type: 'input',
           message: 'What is the department\'s name?',
       }])
-      .then((response => {
-          let newDept;
-          // input needs to be added to the db
-      }));
+      .then(response => {
+        connection.query("INSERT INTO department SET ? ", 
+         {
+         id: response.deptid,
+         name: response.deptname
+         }, (err, res) => {
+         if (err) throw err;
+         console.log("New department added!");
+         start();
+    });    
+  });
 };
+
 
 // prompts for adding a role
 function addRole() {
@@ -83,7 +88,7 @@ function addRole() {
       {
           name: 'rolename',
           type: 'input',
-          message: 'What is the role\'s name?',
+          message: 'What is the role\'s title?',
       },
       {
           name: 'rolesal',
@@ -93,12 +98,23 @@ function addRole() {
       {   name: 'roledept',
           type: 'input',
           message: 'What is the department of the role\'s ID number?',
-  }])
+      }])
       .then((response) => {
-          let newRole;
-          // input needs to be added to the db
-      });
+        connection.query("INSERT INTO role SET ? ", 
+        {
+        id: response.roleid,
+        title: response.rolename,
+        salary: response.rolesal,
+        department_id: response.roledept
+        }, (err, res) => {
+        if (err) throw err;
+        console.log("New role added!");
+        start();
+   });    
+ });
+          
 }
+
 
 // prompts for adding an employee
 function addEmp(){
@@ -127,9 +143,63 @@ function addEmp(){
           type: 'input',
           message: 'What is the employee\'s manager\'s ID number?',
       }]).then((response) => {
-          let newEmployee;
-          // input needs to be added to the db
-      });
+        connection.query("INSERT INTO employee SET ? ", 
+        {
+        id: response.empid,
+        first_name: response.firstname,
+        last_name: response.lastname,
+        role_id: response.erid,
+        manager_id: response.manaid
+        }, (err, res) => {
+        if (err) throw err;
+        console.log("New employee added!");
+        start();
+        });    
+    });
+    
+}
+
+
+// menu prompts for viewing depts, roles, and employees
+const viewMenu = () => {
+
+}
+
+// prompts to update an employee
+const updateEmp = () => {
+    return inquirer
+          .prompt([{
+          name: 'idsearch',
+          type: 'input',
+          message: 'What is the employee\'s id number?',
+        },
+        {
+          name: 'newname',
+          type: 'confirm',
+          message: 'Has the employee\'s name changed?',
+        },
+        {
+          name: 'newrole',
+          type: 'confirm',
+          message: 'Has the employee\'s role changed?',
+       },
+       {
+          name: 'newmgr',
+          type: 'confirm',
+          message: 'Has the employee\'s manager changed?',
+        }])
+        .then((response => {
+            let newDept;
+            // input needs to be added to the db
+        }));
+  };
+
+// function to add a new role
+function addNewRole(){
+}
+
+// function to add a new employee
+function addNewEmployee(){
 }
 
 function init() {
