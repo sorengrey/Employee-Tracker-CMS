@@ -103,6 +103,7 @@ function addRole() {
           message: 'What is the department of the role\'s ID number?',
       }])
       .then((response) => {
+        // adds the response to the role table
         connection.query("INSERT INTO role SET ? ", 
         {
         id: response.roleid,
@@ -144,6 +145,7 @@ function addEmp(){
           type: 'input',
           message: 'What is the employee\'s manager\'s ID number?',
       }]).then((response) => {
+        // adds the response to the employee table
         connection.query("INSERT INTO employee SET ? ", 
         {
         id: response.empid,
@@ -170,6 +172,7 @@ const viewMenu = () => {
     }).then(response => {
         // if the user selects departments, the department table will be displayed in the console
         if(response.whichview === 'departments'){
+            // selects everything in the department table
             const query = `SELECT * FROM department`;
             connection.query(query, (err, data) => {
                 let departmentArray = [];
@@ -179,11 +182,13 @@ const viewMenu = () => {
                        let allDepartments = [id, name];
                        departmentArray.push(allDepartments);
                 })
+                // prints table to console with labels for each column
                 console.table(['ID #', ' Name'], departmentArray)
             })
         }
         // if the user selects roles, the role table will be displayed in the console
         else if(response.whichview === 'roles'){
+            // selects everything in the role table
             const query = `SELECT * FROM role`;
             connection.query(query, (err, data) => {
                 let roleArray = [];
@@ -193,11 +198,13 @@ const viewMenu = () => {
                        let allRoles = [id, title, salary, department_id];
                        roleArray.push(allRoles);
                 })
+                // prints table to console with labels for each column
                 console.table(['ID #', 'Title', 'Yearly Salary', 'Department ID #'], roleArray)
             })
         }
         // if the user selects employees, the employee table will be displayed in the console
         else if(response.whichview === 'employees'){
+            // selects everything in the employee table
             const query = `SELECT * FROM employee`;
             connection.query(query, (err, data) => {
                 let employeeArray = [];
@@ -207,13 +214,15 @@ const viewMenu = () => {
                        let allEmployees = [id, first_name, last_name, role_id, manager_id];
                        employeeArray.push(allEmployees);
                 })
+                // prints table to console with labels for each column
                 console.table(['ID #', 'First Name', 'Last Name', 'Role ID #', 'Manager ID #'], employeeArray)
+                start();
             })
         }
     })
 }
 
-// prompts to update an employee
+// prompts to update an employee - not working yet
 const updateEmp = () => {
     return inquirer
           .prompt([{
@@ -277,7 +286,24 @@ const updateEmp = () => {
 
 // starts the prompts
 function init() {
-// banner goes here - console.log it
+  console.log(`
+
+  ███████ ███    ███ ██████  ██       ██████  ██    ██ ███████ ███████ 
+  ██      ████  ████ ██   ██ ██      ██    ██  ██  ██  ██      ██      
+  █████   ██ ████ ██ ██████  ██      ██    ██   ████   █████   █████   
+  ██      ██  ██  ██ ██      ██      ██    ██    ██    ██      ██      
+  ███████ ██      ██ ██      ███████  ██████     ██    ███████ ███████ 
+                                                                       
+                                                                       
+  ████████ ██████   █████   ██████ ██   ██ ███████ ██████              
+     ██    ██   ██ ██   ██ ██      ██  ██  ██      ██   ██             
+     ██    ██████  ███████ ██      █████   █████   ██████              
+     ██    ██   ██ ██   ██ ██      ██  ██  ██      ██   ██             
+     ██    ██   ██ ██   ██  ██████ ██   ██ ███████ ██   ██             
+                                                                       
+  created by Heather Smith - 2021 - halexsmith86@gmail.com                                                                     
+------------------------------------------------------------      
+`);
   start();
 }
 
