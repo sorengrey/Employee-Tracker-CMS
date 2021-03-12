@@ -1,5 +1,4 @@
 // TO DO
-// write view functions that console log tables
 // write update functions for employee table
 // make a pretty banner
 // record video of it working
@@ -169,14 +168,47 @@ const viewMenu = () => {
         message: 'What would you like to view?',
         choices: ['departments', 'roles', 'employees'],
     }).then(response => {
+        // if the user selects departments, the department table will be displayed in the console
         if(response.whichview === 'departments'){
-            viewDept();
+            const query = `SELECT * FROM department`;
+            connection.query(query, (err, data) => {
+                let departmentArray = [];
+                if (err) throw err;
+                // takes the data in department table and pushes it to the empty departmentArray, matching up the column names to the data in the database
+                data.forEach(({ id, name }) => {
+                       let allDepartments = [id, name];
+                       departmentArray.push(allDepartments);
+                })
+                console.table(['ID #', ' Name'], departmentArray)
+            })
         }
+        // if the user selects roles, the role table will be displayed in the console
         else if(response.whichview === 'roles'){
-            viewRoles();
+            const query = `SELECT * FROM role`;
+            connection.query(query, (err, data) => {
+                let roleArray = [];
+                if (err) throw err;
+                // takes the data in department table and pushes it to the empty roleArray, matching up the column names to the data in the database
+                data.forEach(({ id, title, salary, department_id}) => {
+                       let allRoles = [id, title, salary, department_id];
+                       roleArray.push(allRoles);
+                })
+                console.table(['ID #', 'Title', 'Yearly Salary', 'Department ID #'], roleArray)
+            })
         }
+        // if the user selects employees, the employee table will be displayed in the console
         else if(response.whichview === 'employees'){
-            viewEmployees();
+            const query = `SELECT * FROM employee`;
+            connection.query(query, (err, data) => {
+                let employeeArray = [];
+                if (err) throw err;
+                // takes the data in employee table and pushes it to the empty employeeArray, matching up the column names to the data in the database
+                data.forEach(({ id, first_name, last_name, role_id, manager_id }) => {
+                       let allEmployees = [id, first_name, last_name, role_id, manager_id];
+                       employeeArray.push(allEmployees);
+                })
+                console.table(['ID #', 'First Name', 'Last Name', 'Role ID #', 'Manager ID #'], employeeArray)
+            })
         }
     })
 }
@@ -185,11 +217,6 @@ const viewMenu = () => {
 const updateEmp = () => {
     return inquirer
           .prompt([{
-          name: 'idsearch',
-          type: 'input',
-          message: 'What is the employee\'s id number?',
-        },
-        {
           name: 'newfirst',
           type: 'confirm',
           message: 'Has the employee\'s first name changed?',
@@ -211,26 +238,46 @@ const updateEmp = () => {
         }])
         .then((response => {
             if(response.newfirst = true){
-                newFirst();
+                //
             } else if (response.newlast = true){
-                newLast();
+                //
             } else if (response.newmgr = true){
-                changeMgr();
+                //
             } else if (response.newrole = true){
-                changeRole();
-            } else connection.end;
-            // connection.query("UPDATE employee, SET name = 'response.newname' ")
-            
-        }));
+                //
+            } else {
+                console.log("No changes made.")
+                connection.end;
+            }
+        }))
+    function newFirst(){
+        return inquirer
+        .prompt([{
+                name: 'idsearch',
+                type: 'input',
+                message: 'What is the employee\'s id number?',
+              },
+              {
+                name: 'changedfirst',
+                type: 'input',
+                message: 'What is the employee\'s new first name?'
+         }]).then(response => {
+            // let nameArray = [];
+            // let employeeTemplate = {
+            //     id: response.idsearch,
+            //     first_name: response.changedfirst
+            // }
+         
+            // connection.query("UPDATE employee SET first_name WHERE id = " ){
+
+            // }
+        })
+     }
   };
 
-  function newFirst();
-  function newLast();
-  function changeMgr();
-  function changeRole();
-
+// starts the prompts
 function init() {
- // selectAll();
+// banner goes here - console.log it
   start();
 }
 
