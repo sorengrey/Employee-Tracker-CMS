@@ -2,7 +2,7 @@
 A CLI database-management application that keeps track of employees, departments, and roles.
 
 ![screenshot of application](./Assets/screenshot.png?raw=true "screenshot of application banner and main menu")
-[Click here for a video walkthrough.](https://)<br><br>
+[Click here for a video walkthrough.](https://drive.google.com/file/d/1ul94bVFGY2xdGDnfTi44n_N8mVYYKIQP/view)<br><br>
 
 ### Description
 This application allows a company to keep track of its departments, employees, and their respective roles.
