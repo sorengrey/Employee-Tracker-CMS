@@ -1,6 +1,6 @@
 // TO DO
-// write update functions for employee table
-// make a pretty banner
+// fix scope issues with employee record prompts (or just delete them and only keep the role changer)
+// retake screenshot and replace it
 // record video of it working
 // write the README
 
@@ -17,15 +17,15 @@ function start() {
   inquirer
   .prompt([{
       type: "list",
-      message: "Welcome! Please select from the following options:",
+      message: "Please select from the following options:",
       name: "options",
-      choices: ["Add departments, roles, or employees", "View departments, roles, or employees", "Update employee roles", "EXIT"],
+      choices: ["Add departments, roles, or employees", "View departments, roles, or employees", "Update employee info", "EXIT"],
   }]).then(response =>{
       if (response.options === 'Add departments, roles, or employees') {
           addMenu();
       } else if (response.options === 'View departments, roles, or employees') {
           viewMenu();
-      } else if (response.options === 'Update employee roles') {
+      } else if (response.options === 'Update employee info') {
           updateEmp();
       } else { connection.end();
       }
@@ -145,7 +145,7 @@ function addEmp(){
           type: 'input',
           message: 'What is the employee\'s manager\'s ID number?',
       }]).then((response) => {
-        // adds the response to the employee table
+        // connects to the database and adds the user's response to the employee table
         connection.query("INSERT INTO employee SET ? ", 
         {
         id: response.empid,
@@ -156,6 +156,7 @@ function addEmp(){
         }, (err, res) => {
         if (err) throw err;
         console.log("New employee added!");
+        // takes the user back to the main menu
         start();
         });    
     });  
@@ -174,6 +175,7 @@ const viewMenu = () => {
         if(response.whichview === 'departments'){
             // selects everything in the department table
             const query = `SELECT * FROM department`;
+            // connects to the database
             connection.query(query, (err, data) => {
                 let departmentArray = [];
                 if (err) throw err;
@@ -184,12 +186,16 @@ const viewMenu = () => {
                 })
                 // prints table to console with labels for each column
                 console.table(['ID #', ' Name'], departmentArray)
+                // takes the user back to the main menu
+                start();
             })
         }
+
         // if the user selects roles, the role table will be displayed in the console
         else if(response.whichview === 'roles'){
             // selects everything in the role table
             const query = `SELECT * FROM role`;
+            // connects to the database
             connection.query(query, (err, data) => {
                 let roleArray = [];
                 if (err) throw err;
@@ -200,8 +206,11 @@ const viewMenu = () => {
                 })
                 // prints table to console with labels for each column
                 console.table(['ID #', 'Title', 'Yearly Salary', 'Department ID #'], roleArray)
+                // takes the user back to the main menu
+                start();
             })
         }
+
         // if the user selects employees, the employee table will be displayed in the console
         else if(response.whichview === 'employees'){
             // selects everything in the employee table
@@ -216,13 +225,14 @@ const viewMenu = () => {
                 })
                 // prints table to console with labels for each column
                 console.table(['ID #', 'First Name', 'Last Name', 'Role ID #', 'Manager ID #'], employeeArray)
+                // takes the user back to the main menu
                 start();
             })
         }
     })
 }
 
-// prompts to update an employee - not working yet
+// prompts to update an employee's records
 const updateEmp = () => {
     return inquirer
           .prompt([{
@@ -246,17 +256,18 @@ const updateEmp = () => {
           message: 'Has the employee\'s manager changed?',
         }])
         .then((response => {
+            // if the user answers yes to any of the above questions, the corresponding function is called, otherwise they will be sent back to the main menu
             if(response.newfirst = true){
-                //
+                newFirst();
             } else if (response.newlast = true){
-                //
+                newLast();
             } else if (response.newmgr = true){
-                //
+                newManager()
             } else if (response.newrole = true){
-                //
+                newRole();
             } else {
                 console.log("No changes made.")
-                connection.end;
+                start();
             }
         }))
     function newFirst(){
@@ -271,15 +282,88 @@ const updateEmp = () => {
                 type: 'input',
                 message: 'What is the employee\'s new first name?'
          }]).then(response => {
-            // let nameArray = [];
-            // let employeeTemplate = {
-            //     id: response.idsearch,
-            //     first_name: response.changedfirst
-            // }
-         
-            // connection.query("UPDATE employee SET first_name WHERE id = " ){
-
-            // }
+             // updates the employee's first name if it has changed
+            let updateQuery = `UPDATE employee
+            SET
+            first_name = "${response.changedfirst}"
+            WHERE id = ${response.idsearch};`
+            connection.query(updateQuery, (err) => {
+                if (err) throw err;
+                else console.log("Employee updated!")
+                start();
+            })
+        })
+     }
+     function newLast(){
+        return inquirer
+        .prompt([{
+                name: 'idsearch',
+                type: 'input',
+                message: 'What is the employee\'s id number?',
+              },
+              {
+                name: 'changedlast',
+                type: 'input',
+                message: 'What is the employee\'s new last name?'
+         }]).then(response => {
+             // updates the employee's last name if it has changed
+            let updateQuery = `UPDATE employee
+            SET
+            last_name = "${response.changedlast}"
+            WHERE id = ${response.idsearch};`
+            connection.query(updateQuery, (err) => {
+                if (err) throw err;
+                else console.log("Employee updated!")
+                start();
+            })
+        })
+     }
+     function newManager(){
+        return inquirer
+        .prompt([{
+                name: 'idsearch',
+                type: 'input',
+                message: 'What is the employee\'s id number?',
+              },
+              {
+                name: 'changedmgr',
+                type: 'input',
+                message: 'What is the employee\'s new manager\'s id number?'
+         }]).then(response => {
+             // updates the employee's last name if it has changed
+            let updateQuery = `UPDATE employee
+            SET
+            manager_id = "${response.changedmgr}"
+            WHERE id = ${response.idsearch};`
+            connection.query(updateQuery, (err) => {
+                if (err) throw err;
+                else console.log("Employee updated!")
+                start();
+            })
+        })
+     }
+     function newRole(){
+        return inquirer
+        .prompt([{
+                name: 'idsearch',
+                type: 'input',
+                message: 'What is the employee\'s id number?',
+              },
+              {
+                name: 'changedrole',
+                type: 'input',
+                message: 'What is the employee\'s new role ID number?'
+         }]).then(response => {
+             // updates the employee's role if it has changed
+            let updateQuery = `UPDATE employee
+            SET
+            role_id = "${response.changedrole}"
+            WHERE id = ${response.idsearch};`
+            connection.query(updateQuery, (err) => {
+                if (err) throw err;
+                else console.log("Employee updated!")
+                start();
+            })
         })
      }
   };
@@ -302,7 +386,9 @@ function init() {
      ██    ██   ██ ██   ██  ██████ ██   ██ ███████ ██   ██             
                                                                        
   created by Heather Smith - 2021 - halexsmith86@gmail.com                                                                     
-------------------------------------------------------------      
+-----------------------------------------------------------------------
+
+Welcome!
 `);
   start();
 }
