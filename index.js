@@ -1,9 +1,3 @@
-// TO DO
-// fix scope issues with employee record prompts (or just delete them and only keep the role changer)
-// retake screenshot and replace it
-// record video of it working
-// write the README
-
 // dependencies
 const mysql = require('mysql');
 const inquirer = require('inquirer');
@@ -257,13 +251,13 @@ const updateEmp = () => {
         }])
         .then((response => {
             // if the user answers yes to any of the above questions, the corresponding function is called, otherwise they will be sent back to the main menu
-            if(response.newfirst = true){
+            if(response.newfirst === true){
                 newFirst();
-            } else if (response.newlast = true){
+            } else if (response.newlast === true){
                 newLast();
-            } else if (response.newmgr = true){
+            } else if (response.newmgr === true){
                 newManager()
-            } else if (response.newrole = true){
+            } else if (response.newrole === true){
                 newRole();
             } else {
                 console.log("No changes made.")
