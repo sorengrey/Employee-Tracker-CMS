@@ -1,9 +1,9 @@
 // dependencies
 const mysql = require('mysql');
 const cTable = require('console.table');
-
-// import - might not need this
-//  const index = require('index.js');
+// sequelize
+const Sequelize = require('sequelize');
+require('dotenv').config();
 
 // connecting the database
 const connection = mysql.createConnection({
@@ -22,19 +22,23 @@ const connection = mysql.createConnection({
     database: 'employeetracker',
 });
 
-// // selects all the info in the database 
-// function selectAll () {
-//     connection.query("SELECT * FROM employeetracker", (err, data) => {
-//     if (err) throw err;
-//     console.log(data)
-//     })
-//   }
+
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: 'localhost',
+    dialect: 'mysql',
+    port: 3306,
+  }
+);
+
+module.exports = sequelize;
 
 // connects to the mysql server and sql database
 connection.connect((err) => {
     if (err) console.log(err)
   });
 
-//   module.exports = {
-//       selectAll: selectAll()
-//   }
+  module.exports = connection;
