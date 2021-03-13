@@ -97,7 +97,7 @@ function addRole() {
           message: 'What is the department of the role\'s ID number?',
       }])
       .then((response) => {
-        // adds the response to the role table
+        // adds the user's response to the role table
         connection.query("INSERT INTO role SET ? ", 
         {
         id: response.roleid,
@@ -264,6 +264,7 @@ const updateEmp = () => {
                 start();
             }
         }))
+    // changes the employee's first name
     function newFirst(){
         return inquirer
         .prompt([{
@@ -276,7 +277,7 @@ const updateEmp = () => {
                 type: 'input',
                 message: 'What is the employee\'s new first name?'
          }]).then(response => {
-             // updates the employee's first name if it has changed
+             // looks up the employee by their id number and saves the user's changes
             let updateQuery = `UPDATE employee
             SET
             first_name = "${response.changedfirst}"
@@ -288,6 +289,7 @@ const updateEmp = () => {
             })
         })
      }
+     // changes the employee's last name
      function newLast(){
         return inquirer
         .prompt([{
@@ -312,6 +314,7 @@ const updateEmp = () => {
             })
         })
      }
+     // changes the employee's manager
      function newManager(){
         return inquirer
         .prompt([{
@@ -324,7 +327,7 @@ const updateEmp = () => {
                 type: 'input',
                 message: 'What is the employee\'s new manager\'s id number?'
          }]).then(response => {
-             // updates the employee's last name if it has changed
+            // looks up the employee by their id number and saves the user's changes
             let updateQuery = `UPDATE employee
             SET
             manager_id = "${response.changedmgr}"
@@ -336,6 +339,7 @@ const updateEmp = () => {
             })
         })
      }
+     // updates the user's role
      function newRole(){
         return inquirer
         .prompt([{
@@ -348,7 +352,7 @@ const updateEmp = () => {
                 type: 'input',
                 message: 'What is the employee\'s new role ID number?'
          }]).then(response => {
-             // updates the employee's role if it has changed
+             // looks up the employee by their id number and saves the user's changes
             let updateQuery = `UPDATE employee
             SET
             role_id = "${response.changedrole}"
